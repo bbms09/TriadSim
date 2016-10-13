@@ -145,7 +145,7 @@ get.target.geno <- function(input.plink.file, target.snp,snp.all2) {
 #' family.pos <- found.brks[[2]] 
 #' 
 #' 
-get.brks <- function(N.brk,n.ped, snp.all2, target.snp,rcmb.rate=NA){
+get.brks <- function(N.brk,n.ped, snp.all2, target.snp,rcmb.rate=NA,same.brk=FALSE){
   ### target SNPs must be sorted from smallest to largest
   if (sum(order(target.snp)!=1:length(target.snp))>0)  stop("Target SNPs are no in the correct order of smallest to largest")
   ## two breaking points on each chr so 3 segments
@@ -196,6 +196,10 @@ get.brks <- function(N.brk,n.ped, snp.all2, target.snp,rcmb.rate=NA){
   fam.pos <- NULL
   for (k in 1:length(target.snp)) {
     fam.pos <- cbind(fam.pos,apply(brks < target.snp[k],1,sum))
+  }
+  if (same.brk) {
+    brks <- matrix(rep(brks[1,],nrow(brks)),byrow=T,nrow=nrow(brks))
+    fam.pos <- matrix(rep(fam.pos[1,],nrow(fam.pos)),byrow=T,nrow=nrow(fam.pos))
   }
   return(list(brks,fam.pos))
 }
@@ -594,7 +598,7 @@ TrioSim <- function(input.plink.file, out.put.file, fr.desire,pathways,n.ped, N.
 }
 
 TrioSim2 <- function(input.plink.file, out.put.file, fr.desire,pathways,n.ped, N.brk, target.snp=NA,
-                    betas.e0, betas.e1, e.fr, pop1.frac, rate.beta,rcmb.rate=NA, no_cores=NA,qtl=FALSE) {
+                    betas.e0, betas.e1, e.fr, pop1.frac, rate.beta,rcmb.rate=NA, no_cores=NA,qtl=FALSE,same.brk=FALSE) {
   
   if (length(input.plink.file)==2) two.pop <- T else two.pop <- F
   if (two.pop) file1 <- input.plink.file[[1]] else file1 <- input.plink.file
@@ -626,7 +630,7 @@ TrioSim2 <- function(input.plink.file, out.put.file, fr.desire,pathways,n.ped, N
     kid.tar <- list(kid1.tar, kid2.tar)
   }
   ### get breaking points
-  brks <- get.brks(N.brk,n.ped, snp.all2,target.snp,rcmb.rate)
+  brks <- get.brks(N.brk,n.ped, snp.all2,target.snp,rcmb.rate,same.brk)
   fam.pos <- brks[[2]]
   brks <- brks[[1]]
   ### fit risk
