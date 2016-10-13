@@ -593,6 +593,52 @@ TrioSim <- function(input.plink.file, out.put.file, fr.desire,pathways,n.ped, N.
   glue.chr.segment.par(input.plink.file,out.put.file, brks,sel.fam.all,snp.all2,pathway.all,target.snp,pop.vec,no_cores)
 }
 
+TrioSim2 <- function(input.plink.file, out.put.file, fr.desire,pathways,n.ped, N.brk, target.snp=NA,
+                    betas.e0, betas.e1, e.fr, pop1.frac, rate.beta,rcmb.rate=NA, no_cores=NA,qtl=FALSE) {
+  
+  if (length(input.plink.file)==2) two.pop <- T else two.pop <- F
+  if (two.pop) file1 <- input.plink.file[[1]] else file1 <- input.plink.file
+  ### pick target SNPs if not already given. For stratified scenario only allele frequency in the first subpopulation determine SNP selection
+  if (is.na(target.snp)) {
+    n.snp <- length(unique(unlist(pathways)))
+    pick.snp <- pick_target.snp(input.plink.file, fr.desire,n.snp) 
+    snp.all2 <- pick.snp[[1]]
+    target.snp <- pick.snp[[2]]
+  } else if (sum(order(target.snp)!=1:length(target.snp))>0)  stop("Target SNPs are no in the correct order of smallest to largest")
+  ### get target SNP genotypes 
+  if (!two.pop) {
+    tar.geno <- get.target.geno(input.plink.file, target.snp,snp.all2)
+    mom.tar <- tar.geno[[1]]
+    dad.tar <- tar.geno[[2]]
+    kid.tar <- tar.geno[[3]]
+  } else {
+    tar.geno <- get.target.geno(input.plink.file[[1]], target.snp,snp.all2)
+    mom1.tar <- tar.geno[[1]]
+    dad1.tar <- tar.geno[[2]]
+    kid1.tar <- tar.geno[[3]]
+    tar.geno <- get.target.geno(input.plink.file[[2]], target.snp,snp.all2)
+    mom2.tar <- tar.geno[[1]]
+    dad2.tar <- tar.geno[[2]]
+    kid2.tar <- tar.geno[[3]]
+    
+    mom.tar <- list(mom1.tar, mom2.tar)
+    dad.tar <- list(dad1.tar, dad2.tar)
+    kid.tar <- list(kid1.tar, kid2.tar)
+  }
+  ### get breaking points
+  brks <- get.brks(N.brk,n.ped, snp.all2,target.snp,rcmb.rate)
+  fam.pos <- brks[[2]]
+  brks <- brks[[1]]
+  ### fit risk
+  fit.risk <- fit.risk.model.par(n.ped,brks,target.snp,fam.pos, mom.tar,dad.tar, kid.tar, pathways, betas.e0,e.fr, betas.e1,pop1.frac, rate.beta,qtl,out.put.file,no_cores)
+  sel.fam.all <- fit.risk[[1]]
+  pathway.all <- fit.risk[[2]]
+  e.vec <- fit.risk[[3]]
+  pop.vec <- fit.risk[[4]]
+  ### splice chromosomal fragments together
+  glue.chr.segment.par2(input.plink.file,out.put.file, brks,sel.fam.all,snp.all2,pathway.all,target.snp,pop.vec,no_cores)
+}
+
 glue.chr.segment.par2 <- function(input.plink.file,out.put.file, brks,sel.fam.all,snp.all2,pathway.all,target.snp,pop.vec=NA,no_cores=NA) {
   if (sum(order(target.snp)!=1:length(target.snp))>0)  stop("Target SNPs are no in the correct order of smallest to largest")
   n.ped <- nrow(brks)
@@ -730,7 +776,8 @@ glue.chr.segment.par2 <- function(input.plink.file,out.put.file, brks,sel.fam.al
     rm(geno.all,geno.mom);gc()
   }
 }
-glue.chr.segment.par3 <- function(input.plink.file,out.put.file, brks,sel.fam.all,snp.all2,pathway.all,target.snp,pop.vec=NA,no_cores=NA) {
+
+glue.chr.segment.par3 <- function(input.plink.file,out.put.file, brks,sel.fam.all,snp.all2,pathway.all,target.snp,pop.vec=NA,no_cores=NA,para=T) {
   if (sum(order(target.snp)!=1:length(target.snp))>0)  stop("Target SNPs are no in the correct order of smallest to largest")
   n.ped <- nrow(brks)
   sel.fam.all.org <- sel.fam.all
@@ -832,8 +879,10 @@ glue.chr.segment.par3 <- function(input.plink.file,out.put.file, brks,sel.fam.al
     moms<- NULL
     dads <- NULL
     kids <- NULL
-    
-    if (is.na(no_cores)) no_cores <- parallel::detectCores() - 1
+   
+     
+   if (para) {   
+   if (is.na(no_cores)) no_cores <- parallel::detectCores() - 1
     cl<-parallel::makeCluster(no_cores)
     doParallel::registerDoParallel(cl)
     
@@ -844,7 +893,13 @@ glue.chr.segment.par3 <- function(input.plink.file,out.put.file, brks,sel.fam.al
     #getDoParWorkers()  
     parallel::stopCluster(cl)
     foreach::registerDoSEQ()
-    
+   } else {
+     geno.mfc <-  foreach::foreach(i = 1:n.ped, 
+                                   .combine = rbind) %do%  
+       splice.chr(i)
+   #  parallel::stopCluster(cl)
+   #  foreach::registerDoSEQ()
+    }
     rm(mom,dad,kid) ; gc()
     n.snp <- ncol(geno.mfc)/3
     geno.all <- geno.mfc[,1:n.snp]; 
@@ -980,6 +1035,125 @@ glue.chr.segment.par4 <- function(input.plink.file,out.put.file, brks,sel.fam.al
   parallel::stopCluster(cl)
   foreach::registerDoSEQ()
   geno.gwas
+}
+
+glue.chr.segment3 <- function(input.plink.file,out.put.file, brks,sel.fam.all,snp.all2,pathway.all,target.snp,pop.vec=NA,no_cores=NA,para=T) {
+  if (sum(order(target.snp)!=1:length(target.snp))>0)  stop("Target SNPs are no in the correct order of smallest to largest")
+  n.ped <- nrow(brks)
+  sel.fam.all.org <- sel.fam.all
+  chr.brk <- c(0,which(brks[1,]%in%cumsum(table(snp.all2$V1))))
+  risk.chr <-  sapply(target.snp,function(v){sum(v>cumsum(table(snp.all2$V1)))+1})
+  chr.pos <- target.snp - c(0,cumsum(table(snp.all2$V1)))[risk.chr]
+  
+  input.plink.file.org <- input.plink.file
+  if (length(input.plink.file)==2) pop <- 2 else pop <- 1
+  
+  ### randomly switch mother/father to remove maternal effects in the original data #########
+  mf.flip <- matrix(rbinom(n.ped*(ncol(brks)-1),1,0.5),ncol=ncol(brks)-1,nrow=n.ped)
+  splice.chr <- function() {
+    
+    mom1 <- NULL
+    dad1 <- NULL
+    kid1 <- NULL
+    
+    brks1 <- brks[,(chr.brk[one.chr]+1):chr.brk[one.chr+1]]
+    sel.fam.all1 <- sel.fam.all[,chr.brk[one.chr]:(chr.brk[one.chr+1]-1)]
+    if (one.chr>1) {brks1 <- brks1- brks[1,chr.brk[one.chr]];brks1<-cbind(rep(0,n.ped),brks1)}
+    for (k in 1:(ncol(brks1)-1)){
+      if (mf.flip[i,k]==1) {
+        mom1 <- as.numeric(c(mom1,dad[sel.fam.all1[i,k],(brks1[i,k]+1):brks1[i,k+1]]))
+        dad1 <- as.numeric(c(dad1,mom[sel.fam.all1[i,k],(brks1[i,k]+1):brks1[i,k+1]]))
+      } else {
+        mom1 <- as.numeric(c(mom1,mom[sel.fam.all1[i,k],(brks1[i,k]+1):brks1[i,k+1]]))
+        dad1 <- as.numeric(c(dad1,dad[sel.fam.all1[i,k],(brks1[i,k]+1):brks1[i,k+1]]))
+      }
+      kid1 <- as.numeric(c(kid1,kid[sel.fam.all1[i,k],(brks1[i,k]+1):brks1[i,k+1]]))
+    }
+    c(mom1,dad1,kid1)
+  }
+  
+  geno.all.gwas <- NULL
+  for (one.chr in 1:length(unique(snp.all2$V1)) ) {
+    mom.all <- NULL
+    dad.all <- NULL
+    kid.all <- NULL
+    n.ped.pop1 <-0
+    for (p in 1:pop) {
+      chr <- unique(snp.all2$V1)[one.chr]
+      if (pop==1) {
+        geno.mom <- snpStats::read.plink(paste(input.plink.file[1],'bed',sep='.'),select.snps= snp.all2[snp.all2$V1==chr,'V2'], na.strings = ("-9"))
+        geno.dad <- snpStats::read.plink(paste(input.plink.file[2],'bed',sep='.'),select.snps= snp.all2[snp.all2$V1==chr,'V2'], na.strings = ("-9"))
+        geno.kid <- snpStats::read.plink(paste(input.plink.file[3],'bed',sep='.'),select.snps= snp.all2[snp.all2$V1==chr,'V2'], na.strings = ("-9"))
+      } else {
+        geno.mom <- snpStats::read.plink(paste(input.plink.file[[p]][1],'bed',sep='.'),select.snps= snp.all2[snp.all2$V1==chr,'V2'], na.strings = ("-9"))
+        geno.dad <- snpStats::read.plink(paste(input.plink.file[[p]][2],'bed',sep='.'),select.snps= snp.all2[snp.all2$V1==chr,'V2'], na.strings = ("-9"))
+        geno.kid <- snpStats::read.plink(paste(input.plink.file[[p]][3],'bed',sep='.'),select.snps= snp.all2[snp.all2$V1==chr,'V2'], na.strings = ("-9"))
+      }
+      mom <- geno.mom$genotype@.Data
+      mom <- mom[order(rownames(mom)),]
+      dad <- geno.dad$genotype@.Data
+      dad <- dad[order(rownames(dad)),]
+      kid <- geno.kid$genotype@.Data
+      kid <- kid[order(rownames(kid)),]
+      geno.mom$genotype <-NULL
+      
+      rm(geno.dad,geno.kid)
+      gc()
+      mom <- matrix(as.numeric(mom),byrow=F,ncol=ncol(mom))
+      dad <- matrix(as.numeric(dad),byrow=F,ncol=ncol(mom))
+      kid <- matrix(as.numeric(kid),byrow=F,ncol=ncol(mom))
+      mom[mom==0] <- NA; mom <- mom-1
+      dad[dad==0] <- NA; dad <- dad-1
+      kid[kid==0] <- NA; kid <- kid-1
+      
+      na.sel <- sum(is.na(mom)|is.na(dad)|is.na(kid))
+      mom[na.sel] <-0
+      dad[na.sel] <-0
+      kid[na.sel] <-0
+      comp <- mom+dad-kid
+      
+      mom[!(comp%in%c(0,1,2))] <- 0
+      dad[!(comp%in%c(0,1,2))] <- 0
+      kid[!(comp%in%c(0,1,2))] <- 0
+      comp[!(comp%in%c(0,1,2))] <- 0
+      mom <- 2-mom
+      dad <- 2-dad
+      kid <- 2-kid
+      comp <- 2-comp
+      ### stack case trio on top of comp trio
+      mom.all <- rbind(mom.all,mom,mom)
+      rm(mom);gc()
+      dad.all <- rbind(dad.all,dad,dad)
+      rm(dad);gc()
+      kid.all <- rbind(kid.all, kid, comp)
+      rm(kid,comp);gc()
+      
+      if (p==1 & pop==2) n.ped.pop1 <- nrow(mom.all)
+    }
+    mom <- mom.all; rm(mom.all);gc()
+    dad <- dad.all; rm(dad.all);gc()
+    kid <- kid.all; rm(kid.all);gc()
+    #  brks <- brks.org
+    if (pop==2) sel.fam.all[pop.vec==2,] <- sel.fam.all.org[pop.vec==2,] + n.ped.pop1
+    
+    moms<- NULL
+    dads <- NULL
+    kids <- NULL
+    
+    geno.mfc <- NULL
+    for (i in 1:n.ped) geno.mfc <- rbind(geno.mfc,splice.chr() )
+ 
+    rm(mom,dad,kid) ; gc()
+    n.snp <- ncol(geno.mfc)/3
+    geno.all <- geno.mfc[,1:n.snp]; 
+    geno.all <- rbind(geno.all,geno.mfc[,1:n.snp+n.snp]);
+    geno.all <- rbind(geno.all,geno.mfc[,1:n.snp+n.snp]); 
+    geno.all.gwas <- cbind(geno.all.gwas, geno.all)
+    rm(geno.all,geno.mfc);gc()
+  }
+  ### due to fill in zero's at the creating target snp genotypes to maxize sample size, spliced data wil be different. Fill in with pathway.all results ##
+  geno.all.gwas[,target.snp] <- pathway.all
+  geno.all.gwas
 }
 
 
