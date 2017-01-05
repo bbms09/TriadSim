@@ -5,7 +5,8 @@
 \title{Splicing chromosomal segments}
 \usage{
 glue.chr.segment.par(input.plink.file, out.put.file, brks, sel.fam.all,
-  snp.all2, pathway.all, target.snp, pop.vec = NA, no_cores = NA)
+  snp.all2, pathway.all, target.snp, pop.vec = NA, no_cores = NA,
+  flip = TRUE)
 }
 \arguments{
 \item{input.plink.file}{for simulations of homogenous population, it is a vector of three character strings for the base filenames of the mother's

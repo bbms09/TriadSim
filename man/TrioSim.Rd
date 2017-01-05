@@ -6,7 +6,7 @@
 \usage{
 TrioSim(input.plink.file, out.put.file, fr.desire, pathways, n.ped, N.brk,
   target.snp = NA, betas.e0, betas.e1, e.fr, pop1.frac, rate.beta,
-  rcmb.rate = NA, no_cores = NA, qtl = FALSE)
+  rcmb.rate = NA, no_cores = NA, qtl = FALSE, flip = TRUE)
 }
 \arguments{
 \item{input.plink.file}{for simulations of homogenous population, it is a vector of three character strings for the base filenames of the mother's

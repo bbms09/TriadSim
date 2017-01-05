@@ -4,7 +4,8 @@
 \alias{get.brks}
 \title{Picking chromosomal breaking points}
 \usage{
-get.brks(N.brk, n.ped, snp.all2, target.snp, rcmb.rate = NA)
+get.brks(N.brk, n.ped, snp.all2, target.snp, rcmb.rate = NA,
+  same.brk = FALSE)
 }
 \arguments{
 \item{N.brk}{is an integer giving the number of breaks to be picked for each chromosome.}

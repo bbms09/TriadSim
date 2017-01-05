@@ -6,7 +6,7 @@
 \usage{
 fit.risk.model.par(n.ped, brks, target.snp, fam.pos, mom.tar, dad.tar, kid.tar,
   pathways, betas.e0, e.fr = NA, betas.e, pop1.frac = NA, rate.beta = NA,
-  qtl = FALSE, out.put.file = NA)
+  qtl = FALSE, out.put.file = NA, no_cores = NA)
 }
 \arguments{
 \item{n.ped}{is an integer giving the number of trios to be simulated}
@@ -52,6 +52,8 @@ a file with name ending with "exp.txt" containing the exposure data when exposur
 a file with name ending with "pop.txt" containing information on subpopulation membership when the simulation involves a stratified scenario.
 a file with name ending with "pheno.tx" containing quantitative trait phenotype when a quantitative trait is involved.
 When out.put.file is the default value NA the file names for the above three files are: exposure.txt, population.txt, phenotype.txt.}
+
+\item{no_cores}{is an integer which specifies the number of CPU cores to parallelized.}
 }
 \value{
 The function returns a list of five elements. The first one is a matrix of integer giving the families (in terms of row number) 
