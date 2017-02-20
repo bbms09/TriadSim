@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Min Shi" />
+
+<meta name="date" content="2017-02-15" />
+
+<title>TrioSim Vegnette</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">TrioSim Vegnette</h1>
+<h4 class="author"><em>Min Shi</em></h4>
+<h4 class="date"><em>2017-02-15</em></h4>
+
+
+
+<p><em>TrioSim</em> is a package that can simulate genotypes for case-parent triads with realistic linkage diequilibrium structure and allele frequency distribution by resampling triad genotypes from existing data.</p>
+<div id="main-function-triosim" class="section level2">
+<h2>Main function <code>TrioSim</code></h2>
+<p><code>TrioSim</code> is the main function to simulate realistic trio genotypes. The example function call below simulates genotype data for 1000 case-parent triads under a genetic main effect scenario with a baseline disease prevalence of P0=0.001 and genetic relative risks of 1.5 and 2 for carrying the first and the second pathway respectively. This function call will write PLINK output files into the current directory. Each set (.bim, .bed and .fam files) of PLINK files contain genotype data for one chromosome for all simulated trios. See documentation for more details.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(TrioSim)
+ m.file &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">&quot;TrioSim&quot;</span>),<span class="st">'/extdata/pop1_4chr_mom'</span>,<span class="dt">sep=</span><span class="st">''</span>)
+ f.file &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">&quot;TrioSim&quot;</span>),<span class="st">'/extdata/pop1_4chr_dad'</span>,<span class="dt">sep=</span><span class="st">''</span>)
+ k.file &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">&quot;TrioSim&quot;</span>),<span class="st">'/extdata/pop1_4chr_kid'</span>,<span class="dt">sep=</span><span class="st">''</span>)
+ input.plink.file &lt;-<span class="st"> </span><span class="kw">c</span>(m.file, f.file, k.file)
+
+ <span class="kw">TrioSim</span>(input.plink.file, <span class="st">'triad'</span>, <span class="dt">fr.desire=</span><span class="fl">0.05</span>,<span class="dt">pathways=</span><span class="kw">list</span>(<span class="dv">1</span>:<span class="dv">4</span>,<span class="dv">5</span>:<span class="dv">8</span>),<span class="dt">n.ped=</span><span class="dv">1000</span>, <span class="dt">N.brk=</span><span class="dv">3</span>, <span class="dt">target.snp=</span><span class="ot">NA</span>,<span class="dt">P0=</span><span class="fl">0.001</span>,<span class="dt">is.OR=</span><span class="ot">FALSE</span>,<span class="dt">risk.exposure=</span> <span class="dv">1</span>,<span class="dt">risk.pathway.unexposed=</span><span class="kw">c</span>(<span class="fl">1.5</span>, <span class="dv">2</span>), <span class="dt">risk.pathway.exposed=</span><span class="kw">c</span>(<span class="fl">1.5</span>, <span class="dv">2</span>), <span class="dt">is.case=</span><span class="ot">TRUE</span>, <span class="dt">e.fr=</span><span class="ot">NA</span>, <span class="dt">pop1.frac=</span><span class="ot">NA</span>, <span class="dt">rate.beta=</span><span class="dv">0</span>,rcmb.rate, <span class="dt">no_cores=</span><span class="ot">NA</span>)</code></pre></div>
+<pre><code>## [1] 1084 2044 3285 4016 5117 6067 7077 8187
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to triad1.fam 
+## Writing extended MAP file to triad1.bim 
+## Writing BED file to triad1.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to triad8.fam 
+## Writing extended MAP file to triad8.bim 
+## Writing BED file to triad8.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to triad17.fam 
+## Writing extended MAP file to triad17.bim 
+## Writing BED file to triad17.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to triad20.fam 
+## Writing extended MAP file to triad20.bim 
+## Writing BED file to triad20.bed (SNP-major mode)</code></pre>
+<pre><code>## NULL</code></pre>
+<p>This following call simlates quantitative trait. The function will create 4 sets of plink files, one for each single chromosome.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">TrioSim</span>(input.plink.file, <span class="st">'qtl'</span>, <span class="dt">fr.desire=</span><span class="fl">0.3</span>,<span class="dt">pathways=</span><span class="kw">list</span>(<span class="dv">1</span>:<span class="dv">4</span>,<span class="dv">5</span>:<span class="dv">8</span>),<span class="dt">n.ped=</span><span class="dv">1000</span>, <span class="dt">N.brk=</span><span class="dv">3</span>, <span class="dt">target.snp=</span><span class="ot">NA</span>,<span class="dt">P0=</span><span class="fl">0.001</span>,<span class="dt">is.OR=</span><span class="ot">FALSE</span>,<span class="dt">risk.exposure=</span> <span class="dv">1</span>,<span class="dt">risk.pathway.unexposed=</span><span class="kw">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>), <span class="dt">risk.pathway.exposed=</span><span class="kw">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>), <span class="dt">is.case=</span><span class="ot">TRUE</span>, <span class="dt">e.fr=</span><span class="ot">NA</span>, <span class="dt">pop1.frac=</span><span class="ot">NA</span>, <span class="dt">rate.beta=</span><span class="dv">0</span>,rcmb.rate, <span class="dt">no_cores=</span><span class="dv">5</span>, <span class="dt">qtl=</span>T)</code></pre></div>
+<pre><code>## [1] 1346 2372 3596 5013 5771 6931 7850 8709
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to qtl1.fam 
+## Writing extended MAP file to qtl1.bim 
+## Writing BED file to qtl1.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to qtl8.fam 
+## Writing extended MAP file to qtl8.bim 
+## Writing BED file to qtl8.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to qtl17.fam 
+## Writing extended MAP file to qtl17.bim 
+## Writing BED file to qtl17.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to qtl20.fam 
+## Writing extended MAP file to qtl20.bim 
+## Writing BED file to qtl20.bed (SNP-major mode)</code></pre>
+<pre><code>## NULL</code></pre>
+<p>To simulate case-control data the function needs to be called twice, calls to simulate cases and controls respectively. The script below calls the function to simulate 1000 cases and 1000 controls.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## cases
+ <span class="kw">TrioSim</span>(input.plink.file, <span class="st">'case'</span>, <span class="dt">fr.desire=</span><span class="fl">0.05</span>,<span class="dt">pathways=</span><span class="kw">list</span>(<span class="dv">1</span>:<span class="dv">4</span>,<span class="dv">5</span>:<span class="dv">8</span>),<span class="dt">n.ped=</span><span class="dv">1000</span>, <span class="dt">N.brk=</span><span class="dv">3</span>, <span class="dt">target.snp=</span><span class="ot">NA</span>,<span class="dt">P0=</span><span class="fl">0.001</span>,<span class="dt">is.OR=</span><span class="ot">FALSE</span>,<span class="dt">risk.exposure=</span> <span class="dv">1</span>,<span class="dt">risk.pathway.unexposed=</span><span class="kw">c</span>(<span class="fl">1.5</span>, <span class="dv">2</span>), <span class="dt">risk.pathway.exposed=</span><span class="kw">c</span>(<span class="fl">1.5</span>, <span class="dv">2</span>), <span class="dt">is.case=</span><span class="ot">TRUE</span>, <span class="dt">e.fr=</span><span class="ot">NA</span>, <span class="dt">pop1.frac=</span><span class="ot">NA</span>, <span class="dt">rate.beta=</span><span class="dv">0</span>,rcmb.rate, <span class="dt">no_cores=</span><span class="ot">NA</span>)</code></pre></div>
+<pre><code>## [1] 1084 2044 3285 4016 5117 6067 7077 8187
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to case1.fam 
+## Writing extended MAP file to case1.bim 
+## Writing BED file to case1.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to case8.fam 
+## Writing extended MAP file to case8.bim 
+## Writing BED file to case8.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to case17.fam 
+## Writing extended MAP file to case17.bim 
+## Writing BED file to case17.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to case20.fam 
+## Writing extended MAP file to case20.bim 
+## Writing BED file to case20.bed (SNP-major mode)</code></pre>
+<pre><code>## NULL</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## controls
+ <span class="kw">TrioSim</span>(input.plink.file, <span class="st">'ctrl'</span>, <span class="dt">fr.desire=</span><span class="fl">0.05</span>,<span class="dt">pathways=</span><span class="kw">list</span>(<span class="dv">1</span>:<span class="dv">4</span>,<span class="dv">5</span>:<span class="dv">8</span>),<span class="dt">n.ped=</span><span class="dv">1000</span>, <span class="dt">N.brk=</span><span class="dv">3</span>, <span class="dt">target.snp=</span><span class="ot">NA</span>,<span class="dt">P0=</span><span class="fl">0.001</span>,<span class="dt">is.OR=</span><span class="ot">FALSE</span>,<span class="dt">risk.exposure=</span> <span class="dv">1</span>,<span class="dt">risk.pathway.unexposed=</span><span class="kw">c</span>(<span class="fl">1.5</span>, <span class="dv">2</span>), <span class="dt">risk.pathway.exposed=</span><span class="kw">c</span>(<span class="fl">1.5</span>, <span class="dv">2</span>), <span class="dt">is.case=</span><span class="ot">FALSE</span>, <span class="dt">e.fr=</span><span class="ot">NA</span>, <span class="dt">pop1.frac=</span><span class="ot">NA</span>, <span class="dt">rate.beta=</span><span class="dv">0</span>,rcmb.rate, <span class="dt">no_cores=</span><span class="ot">NA</span>)</code></pre></div>
+<pre><code>## [1] 1084 2044 3285 4016 5117 6067 7077 8187
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to ctrl1.fam 
+## Writing extended MAP file to ctrl1.bim 
+## Writing BED file to ctrl1.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to ctrl8.fam 
+## Writing extended MAP file to ctrl8.bim 
+## Writing BED file to ctrl8.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to ctrl17.fam 
+## Writing extended MAP file to ctrl17.bim 
+## Writing BED file to ctrl17.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to ctrl20.fam 
+## Writing extended MAP file to ctrl20.bim 
+## Writing BED file to ctrl20.bed (SNP-major mode)</code></pre>
+<pre><code>## NULL</code></pre>
+</div>
+<div id="facility-functions" class="section level2">
+<h2>Facility functions</h2>
+<p>The following set of functions are provided in case users want to have more controls over the simulation parameters. They are called by the main function to generate simulations. Users do not need to call them directly.</p>
+<div id="pick_target.snp" class="section level3">
+<h3><code>pick_target.snp</code></h3>
+<p>Users can manually pick the target SNPs in the pathway or use the facility function <code>pick_target.snp</code> to pick the set of target SNPs in the pathway(s) based on a desired allele frequency. The example below uses the example files in the package to select 8 SNPs with allele frequencies close to 0.05. The function returns the selected target SNPs by giving the row numbers (i.e., the order) of the corresponding SNPs among all the SNPs in the associated “bim” file.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> m.file &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">&quot;TrioSim&quot;</span>),<span class="st">'/extdata/pop1_4chr_mom'</span>,<span class="dt">sep=</span><span class="st">''</span>)
+ f.file &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">&quot;TrioSim&quot;</span>),<span class="st">'/extdata/pop1_4chr_dad'</span>,<span class="dt">sep=</span><span class="st">''</span>)
+ picked.target &lt;-<span class="st"> </span><span class="kw">pick_target.snp</span>(<span class="kw">c</span>(m.file,f.file),<span class="fl">0.05</span>, <span class="dv">8</span>)</code></pre></div>
+<pre><code>## [1] 1084 2044 3285 4016 5117 6067 7077 8187</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">cat</span>(<span class="st">'Target SNPs picked:'</span>,picked.target[[<span class="dv">2</span>]],<span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</code></pre></div>
+<pre><code>## Target SNPs picked: 1084 2044 3285 4016 5117 6067 7077 8187</code></pre>
+</div>
+<div id="get.target.geno" class="section level3">
+<h3><code>get.target.geno</code></h3>
+<p>The function <code>get.target.geno</code> retrieves genotypes of the target SNPs and return the genotypes of the triads in a list of three elements: they are the observed genotypes of the mothers from family 1 to family n repeated twice, genotypes of the fathers from family 1 to family n repeated twice and genotypes of children from family 1 to n followed by (stacking on top of) genotypes of the complements at the target SNP.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">target.snp &lt;-<span class="st"> </span>picked.target[[<span class="dv">2</span>]]
+m.file &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">&quot;TrioSim&quot;</span>),<span class="st">'/extdata/pop1_4chr_mom'</span>,<span class="dt">sep=</span><span class="st">''</span>)
+f.file &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">&quot;TrioSim&quot;</span>),<span class="st">'/extdata/pop1_4chr_dad'</span>,<span class="dt">sep=</span><span class="st">''</span>)
+k.file &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">&quot;TrioSim&quot;</span>),<span class="st">'/extdata/pop1_4chr_kid'</span>,<span class="dt">sep=</span><span class="st">''</span>)
+<span class="co"># the preloaded data frame snp.all2 contains the data frame read from the corresponding .bim file.</span>
+target.geno &lt;-<span class="st"> </span><span class="kw">get.target.geno</span>(<span class="kw">c</span>(m.file,f.file,k.file), target.snp,snp.all2)</code></pre></div>
+<p>The output <em>target.geno</em> is a list of three elements, each being a matrix of genotypes</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(target.geno)</code></pre></div>
+<pre><code>## [1] 3</code></pre>
+<p>For this example the genotypes is a 2000 x 8 numerical matrix</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mom.target &lt;-<span class="st"> </span>target.geno[[<span class="dv">1</span>]]
+dad.target &lt;-<span class="st"> </span>target.geno[[<span class="dv">2</span>]]
+kid.target &lt;-<span class="st"> </span>target.geno[[<span class="dv">3</span>]]
+<span class="kw">str</span>(mom.target)</code></pre></div>
+<pre><code>##  num [1:2000, 1:8] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
+<p>To increase diversity, the program introduced breaking points at each chromosome. The break points can be picked manually or use function <code>get.brks</code>. The function tends to pick the breaking points at recombination hotspots if such data are passed in as a parameter <em>rcmb.rate</em>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">found.brks &lt;-<span class="st"> </span><span class="kw">get.brks</span>(<span class="dt">N.brk=</span><span class="dv">3</span>,<span class="dt">n.ped=</span><span class="dv">1000</span>, snp.all2, target.snp,<span class="dt">rcmb.rate=</span>rcmb.rate)
+breaks &lt;-<span class="st"> </span>found.brks[[<span class="dv">1</span>]]
+family.position &lt;-<span class="st"> </span>found.brks[[<span class="dv">2</span>]] </code></pre></div>
+<p>This function returns a list of two items. The first is a 1000 x 17 matrix of integers showing where the chromosomal breaks is to take place for each individual in the simulated trios. Note that it also includes 0, the total number of SNPs and the breaking points between different chromosomes. Here 1000 denotes the number of triads in the simulated data as defined by the <code>n.ped</code> input parameter.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(breaks)</code></pre></div>
+<pre><code>## [1] 1000   17</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(breaks)</code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]
+## [1,]    0 2024 2559 3997 4303 5824 6089 7410 7411  7792  8004  8418  8869
+## [2,]    0 1179 2380 3523 4303 5759 6281 7376 7411  7496  7993  8564  8869
+## [3,]    0 1788 2665 3872 4303 5866 6671 7388 7411  7524  7990  8433  8869
+## [4,]    0 1866 2580 3564 4303 5200 6446 7406 7411  7866  8266  8475  8869
+## [5,]    0 1630 2381 3662 4303 5390 6561 7402 7411  7701  8277  8845  8869
+## [6,]    0 1559 3260 3564 4303 6016 6116 7397 7411  7697  8205  8791  8869
+##      [,14] [,15] [,16] [,17]
+## [1,]  9254  9763 10069 10279
+## [2,]  8984  9404 10223 10279
+## [3,]  9049  9404  9964 10279
+## [4,]  9060  9768 10271 10279
+## [5,]  9037  9341 10100 10279
+## [6,]  9202  9548 10199 10279</code></pre>
+<p>The second one is a 1000 x 8 matrix showing the chromosomal segments out of which each target SNP is selected for each simulated trio.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(family.position)</code></pre></div>
+<pre><code>## [1] 1000    8</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(family.position)</code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
+## [1,]    1    2    3    4    5    6    7   11
+## [2,]    1    2    3    4    5    6    7   11
+## [3,]    1    2    3    4    5    6    7   11
+## [4,]    1    2    3    4    5    6    7   10
+## [5,]    1    2    3    4    5    6    7   10
+## [6,]    1    2    3    4    5    6    7   10</code></pre>
+</div>
+<div id="fit.risk.model.par" class="section level3">
+<h3><code>fit.risk.model.par</code></h3>
+<p><code>fit.risk.model.par</code> is a function that resamples families based on the specified risk model. It can simulate a homogenous scenario or a stratified scenario with two subpopulations. The risk model can involve exposure main effects as well as gene by exposure interations. This function is parallelized to shorten the running time. An example to call the function is given below.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">betas &lt;-<span class="st"> </span><span class="kw">c</span>(-<span class="fl">6.4</span>, <span class="fl">3.2</span>, <span class="fl">5.8</span>)
+pwy &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">1</span>:<span class="dv">4</span>,<span class="dv">5</span>:<span class="dv">8</span>)
+## scenarios of genetic main effects only for a binary phenotype
+fitted.model1 &lt;-<span class="st"> </span><span class="kw">fit.risk.model.par</span>(<span class="dt">n.ped=</span><span class="dv">1000</span>,<span class="dt">brks=</span>breaks,target.snp,<span class="dt">fam.pos=</span>family.position, 
+<span class="dt">mom.tar=</span>mom.target,<span class="dt">dad.tar=</span>dad.target, <span class="dt">kid.tar=</span>kid.target, <span class="dt">pathways=</span>pwy, 
+betas, <span class="dt">e.fr=</span><span class="ot">NA</span>, betas,<span class="dt">pop1.frac=</span> <span class="ot">NA</span>,<span class="dt">rate.beta=</span><span class="ot">NA</span>,<span class="dt">qtl=</span> <span class="ot">FALSE</span>)
+
+sel.fam &lt;-<span class="st"> </span>fitted.model1[[<span class="dv">1</span>]]
+sim.pathway.geno &lt;-<span class="st">  </span>fitted.model1[[<span class="dv">2</span>]]
+
+<span class="kw">dim</span>(sel.fam)</code></pre></div>
+<pre><code>## [1] 1000   16</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(sim.pathway.geno)</code></pre></div>
+<pre><code>## [1] 3000    8</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## scenarios of gene-environment interaction  for a binary phenotype
+betas.e &lt;-<span class="st"> </span><span class="kw">c</span>(-<span class="fl">6.4</span>, <span class="fl">3.9</span>, <span class="fl">6.5</span>)
+
+fitted.model2 &lt;-<span class="st"> </span><span class="kw">fit.risk.model.par</span>(<span class="dt">n.ped=</span><span class="dv">1000</span>,<span class="dt">brks=</span>breaks,target.snp,<span class="dt">fam.pos=</span>family.position, 
+<span class="dt">mom.tar=</span>mom.target,<span class="dt">dad.tar=</span>dad.target, <span class="dt">kid.tar=</span>kid.target, <span class="dt">pathways=</span>pwy, 
+betas, <span class="dt">e.fr=</span> <span class="fl">0.2</span>, betas.e,<span class="dt">pop1.frac=</span> <span class="ot">NA</span>,<span class="dt">rate.beta=</span><span class="ot">NA</span>, <span class="dt">qtl=</span> <span class="ot">FALSE</span>)
+exposure &lt;-<span class="st">  </span>fitted.model2[[<span class="dv">3</span>]]
+<span class="kw">table</span>(exposure)</code></pre></div>
+<pre><code>## exposure
+##   0   1 
+## 800 200</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## scenarios of a quantitative trait phenotype
+fitted.model3 &lt;-<span class="st"> </span><span class="kw">fit.risk.model.par</span>(<span class="dt">n.ped=</span><span class="dv">1000</span>,<span class="dt">brks=</span>breaks,target.snp,<span class="dt">fam.pos=</span>family.position, 
+<span class="dt">mom.tar=</span>mom.target,<span class="dt">dad.tar=</span>dad.target, <span class="dt">kid.tar=</span>kid.target, <span class="dt">pathways=</span>pwy, 
+betas, <span class="dt">e.fr=</span><span class="ot">NA</span>, betas,<span class="dt">pop1.frac=</span> <span class="ot">NA</span>,<span class="dt">rate.beta=</span><span class="ot">NA</span>,<span class="dt">qtl=</span><span class="ot">TRUE</span>)
+qt.pheno &lt;-<span class="st">  </span>fitted.model3[[<span class="dv">5</span>]]
+
+<span class="kw">hist</span>(qt.pheno,<span class="dt">main=</span><span class="st">'Histogram of Simulated Quantitative Trait'</span>,<span class="dt">xlab=</span><span class="st">'QT'</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" alt /><!-- --></p>
+</div>
+<div id="glue.chr.segment.par" class="section level3">
+<h3><code>glue.chr.segment.par</code></h3>
+<p><code>glue.chr.segment.par</code> is a function that splices the triad chromosomal segments into “complete” trios. The spliced trio sets are written into separate plink files chromosome by chromosome. It is parallelized and if no no_cores value is given the total number of CPUs available will be used in the parallelization. Be aware that running the following code will write PLINK files to your current working direcotry.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glue.chr.segment.par</span>(<span class="kw">c</span>(m.file,f.file,k.file),<span class="st">'trio'</span>, breaks,sel.fam,snp.all2,sim.pathway.geno,target.snp,<span class="dt">pop.vec=</span><span class="ot">NA</span>,<span class="dt">no_cores=</span><span class="ot">NA</span>,<span class="dt">flip=</span><span class="ot">TRUE</span>) </code></pre></div>
+<pre><code>## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to trio1.fam 
+## Writing extended MAP file to trio1.bim 
+## Writing BED file to trio1.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to trio8.fam 
+## Writing extended MAP file to trio8.bim 
+## Writing BED file to trio8.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to trio17.fam 
+## Writing extended MAP file to trio17.bim 
+## Writing BED file to trio17.bed (SNP-major mode)
+## coercing object of mode  numeric  to SnpMatrix
+## Writing FAM file to trio20.fam 
+## Writing extended MAP file to trio20.bim 
+## Writing BED file to trio20.bed (SNP-major mode)</code></pre>
+<pre><code>## NULL</code></pre>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

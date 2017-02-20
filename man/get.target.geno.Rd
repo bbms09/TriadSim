@@ -8,7 +8,7 @@ get.target.geno(input.plink.file, target.snp, snp.all2)
 }
 \arguments{
 \item{input.plink.file}{is a vector of three character strings for the file names of the mother's
-father's and child's plink base filenames. The plink files are in bed format and three files with 
+father's and child's plink base filenames with the necessary path to the directory. The plink files are in bed format and three files with 
 extensions .bed .bim and .fam are expected for each individual's genotypes. The mothers, fathers, and 
 childredn must be from the same set of trio families even though the ordering of the families can be different
 for the three sets of data.}
@@ -19,16 +19,20 @@ for the three sets of data.}
 the rs number of the SNPs. The colname name of the second column has to be "V2".}
 }
 \value{
-A list of three matrices is returned. The three matrices are the observed genotypes of the mothers, fathers
-and children/complements at the target SNPs.
+A list of three matrices is returned. The three matrices are the observed genotypes of the mothers from family 1 to family n repeated twice,
+genotypes of the fathers from family 1 to family n repeated twice and genotypes of children from family 1 to n followed by (stacking on top of) 
+genotypes of the complements at the target SNPs.
 }
 \description{
-This function read out the genotypes of the target SNPs from the orignal data set (the data set on
+This function read out the genotypes of the selected target SNPs from the orignal data set (the data set on
 which simulation is based).
 }
 \examples{
-tar.snp <- c(10, 203, 342, 500)
-assuming snps contains the data frame read from the .bim file.
-get.target.geno(c('cau_mom','cau_dad','cau_kid'), tar.snp,snps)
+tar.snp <- c(1084, 2044, 3285, 4016, 5117 ,6067, 7077, 8187)
+m.file <- paste(system.file(package = "TrioSim"),'/extdata/pop1_4chr_mom',sep='')
+f.file <- paste(system.file(package = "TrioSim"),'/extdata/pop1_4chr_dad',sep='')
+k.file <- paste(system.file(package = "TrioSim"),'/extdata/pop1_4chr_kid',sep='')
+# the preloaded data frame snp.all2 contains the data frame read from the corresponding .bim file.
+target.geno <- get.target.geno(c(m.file,f.file,k.file), tar.snp,snp.all2)
 }
 

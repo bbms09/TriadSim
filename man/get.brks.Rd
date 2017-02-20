@@ -19,25 +19,28 @@ containing the chromosomal postion of the SNPs.}
 \item{target.snp}{is a vector of integers showing the row number of the target SNPs in the .bim file.}
 
 \item{rcmb.rate}{the default value is NA. rcmb.rate is a dataframe containing the recombination rates at each SNP. The ordering of the SNPs should 
-be identical to that of snp.all2. It contains 4 columns with column names "V1", "V2","V3",and "V4" with the 
+be identical to that of snp.all2. It contains 4 columns with column names 'CHR','RS','POS',and 'RATE with the 
 corresponding values for "the chromosomal number", "SNP rs number", "chromosomal position",
 and "recombination rate". The recombination rate represents the maximum recombination rate in the chromosomal
 region between the current SNP and the SNP above (or the first basepair of the chromosome for the first SNP on a chromosome).
 When no rcmb.rate is provided the function will pick the breaking points randomly where keeping the breaking
-points in between target SNPs.}
+points in between target SNPs. An example recombination rate data frame "rcmb.rate" is already loaded with the package.}
+
+\item{same.brk}{is an indicator variable to denote whethere the same set of breaking points will be used for all simulated triads}
 }
 \value{
 A list of two elements is returned. The first one is a matrix of integers showing where 
-the chromosomal breaks is to take place for each individual in the simulated trios. The second one
-is a matrix showing the chromosomal segments out of which is each target SNP selected for each simulated trio.
+the chromosomal breaks is to take place for each individuals in the simulated trios. The second one
+is a matrix showing the chromosomal segments out of which each target SNP is selected for each simulated trio.
 }
 \description{
 The breaking points at each chromosome can be picked manually or use this function. 
-When a dataframe containing the recombination rate (rcmb.rate) is provided the function
+When a data frame containing the recombination rates (rcmb.rate) is provided the function
 tends to pick the breaking points at recombination hotspots.
 }
 \examples{
-found.brks <- get.brks(N.brk=3,n.ped=1000, snp.all2, target.snp,rcmb.rate=NA)
+tar.snp <- c(1084, 2044, 3285, 4016, 5117 ,6067, 7077, 8187)
+found.brks <- get.brks(N.brk=3,n.ped=1000, snp.all2, tar.snp,rcmb.rate=NA)
 breaks <- found.brks[[1]]
 family.pos <- found.brks[[2]] 
 

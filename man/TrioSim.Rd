@@ -5,8 +5,10 @@
 \title{TrioSim: simulate realistic trio genotypes}
 \usage{
 TrioSim(input.plink.file, out.put.file, fr.desire, pathways, n.ped, N.brk,
-  target.snp = NA, betas.e0, betas.e1, e.fr, pop1.frac, rate.beta,
-  rcmb.rate = NA, no_cores = NA, qtl = FALSE, flip = TRUE)
+  target.snp = NA, P0, is.OR, risk.exposure, risk.pathway.unexposed,
+  risk.pathway.exposed, is.case = TRUE, e.fr = NA, pop1.frac = NA,
+  rate.beta, rcmb.rate = NA, no_cores = NA, qtl = FALSE,
+  same.brk = FALSE, flip = TRUE)
 }
 \arguments{
 \item{input.plink.file}{for simulations of homogenous population, it is a vector of three character strings for the base filenames of the mother's
@@ -29,7 +31,20 @@ number. E.g., for a base filename "trio" and for chromosome 1 the final file nam
 
 \item{target.snp}{is a vector of integers showing the row number of the target SNPs in the .bim file.}
 
-\item{betas.e0}{is a vector of doubles giving the beta coefficient of the logit risk model for the unexposed individuals.}
+\item{P0}{gives the baseline disease prevalence in the unexposed individuals with 0 copies of the risk pathways.}
+
+\item{is.OR}{is a boolean varialbe denoting wether the input risk parameters () are odds ratios. It is TRUE when the input risks are odds ratios.}
+
+\item{risk.exposure}{is a double giving the relative risk (or odds ratio, if is.OR=TRUE) of the exposure main effect.}
+
+\item{risk.pathway.unexposed}{is a vector of doubles giving the relative risk (or odds ratio, if is.OR=TRUE) of each risk pathways in the unexposed individuals 
+with the risk of unexposed individuals who carry no copies of the pathways as a reference.}
+
+\item{risk.pathway.exposed}{is a vector of doubles giving the relative risk (or odds ratio, if is.OR=TRUE) of each risk pathways in the exposed individuals. 
+with the risk of exposed individuals who carry no copies of the pathways as a reference. For scenarios that do not involve exposure the value 
+of this vector is not used.}
+
+\item{is.case}{is a boolean variable. When is.case = TRUE case-parents trios will be simulated.Otherwise, control-parents trios will be simulated.}
 
 \item{e.fr}{is a double number between 0 and 1 which gives the exposure prevalence.}
 
@@ -38,7 +53,7 @@ number. E.g., for a base filename "trio" and for chromosome 1 the final file nam
 \item{rate.beta}{is a double number giving the log OR of disease prevalence in population 2 over that in population 1.}
 
 \item{rcmb.rate}{the default value is NA. rcmb.rate is a dataframe containing the recombination rates at each SNP. The ordering of the SNPs should 
-be identical to that of snp.all2. It contains 4 columns with column names "V1", "V2","V3",and "V4" with the 
+be identical to that of snp.all2. It contains 4 columns with column names 'CHR','RS','POS', and 'RATE' with the 
 corresponding values for "the chromosomal number", "SNP rs number", "chromosomal position",
 and "recombination rate". The recombination rate represents the maximum recombination rate in the chromosomal
 region between the current SNP and the SNP above (or the first basepair of the chromosome for the first SNP on a chromosome).
@@ -48,24 +63,32 @@ points in between target SNPs.}
 \item{no_cores}{is an integer which specifies the number of CPU cores to parallelized.}
 
 \item{qtl}{is a boolean variable denoting whether a quantitative trait (qtl=TRUE) or a binary trait (qtl=FALSE) is to be simulated. For a binary trait only affected 
-families will be kept. The default value is qtl=FALSE.}
+families will be kept. The default value is qtl=FALSE.t6}
 
-\item{betas.e}{is a vector of doubles giving the beta coefficient of the logit risk model for the exposed individuals.}
+\item{same.brk}{is an indicator variable to denote whethere the same set of breaking points will be used for all simulated triads}
+
+\item{flip}{is boolean indicating whether the mother's and the father's genotypes will be swapped to wipe out potential maternal effects in the orignal data}
 }
 \value{
 this function  simulates trios and writes PLINK files into the current directory. Each set of PLINK files contains genotype
-data for one chromosome for all trios. The first third of the rows are genotypes of the mothers'. The seond third are those of the fathers' and the last third are the 
-children's.
+data for one chromosome for all trios. Genotypes of the mothers, fathers, and children are stacked on top of each other. The first third of the rows are genotypes of the mothers'.
+The seond third are those of the fathers' and the last third are the children's. 
+The following files are also generated under specific scenarios:
+a file with name ending with "exp.txt" containing the exposure data when exposure is involved in the risk model.
+a file with name ending with "pop.txt" containing information on subpopulation membership when the simulation involves a stratified scenario.
+a file with name ending with "pheno.tx" containing quantitative trait phenotype when a quantitative trait is involved.
 }
 \description{
 TrioSim: simulate realistic trio genotypes
 }
 \examples{
-baseFilename <- system.file("extdata", "pop1_4chr_dad.bed", package = "TrioSim")
-baseFilename <- sub('pop1_4chr_dad.bed','',baseFilename)
-input.plink.file <- c(paste(baseFilename,'pop1_4chr_mom.bed',sep=''),paste(baseFilename,'pop1_4chr_dad.bed',sep=''),
-paste(baseFilename,'pop1_4chr_kid.bed',sep=''))
-TrioSim(input.plink.file, 'pop1_', fr.desire=0.05,pathways=list(1:4,5:8),n.ped=1000, N.brk=3, target.snp=NA,
-betas.e0=c(0,0,0), betas.e1=c(0,0,0), e.fr=NA, pop1.frac=NA, rate.beta=0,rcmb.rate, no_cores=NA)
+m.file <- paste(system.file(package = "TrioSim"),'/extdata/pop1_4chr_mom',sep='')
+f.file <- paste(system.file(package = "TrioSim"),'/extdata/pop1_4chr_dad',sep='')
+k.file <- paste(system.file(package = "TrioSim"),'/extdata/pop1_4chr_kid',sep='')
+input.plink.file <- c(m.file, f.file, k.file)
+TrioSim(input.plink.file, 'triad', fr.desire=0.05,pathways=list(1:4,5:8),n.ped=1000, 
+       N.brk=3, target.snp=NA,P0=0.001,is.OR=FALSE,risk.exposure= 1,
+       risk.pathway.unexposed=c(1.5, 2), risk.pathway.exposed=c(1.5, 2), is.case=TRUE, e.fr=NA, 
+       pop1.frac=NA, rate.beta=0, rcmb.rate, no_cores=1)
 }
 
