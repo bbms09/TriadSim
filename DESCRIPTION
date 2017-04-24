@@ -1,6 +1,6 @@
-Package: TrioSim
+Package: TriadSim
 Title: Simulating Triad Genomewide Genotypes
-Version: 0.0.0.9000
+Version: 0.0.9000
 Authors@R: person("Min", "Shi", email = "shi2@niehs.nih.gov", role = c("aut", "cre"))
 Description: This package simulates genotypes for case-parent triads with realistic linkage diequilibrium structure and allele frquency distribution by resampling triad genotypes from existing data.
 Depends:
