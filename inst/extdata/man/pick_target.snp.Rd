@@ -28,8 +28,8 @@ It helps pick the set of target SNPs in the pathway(s) based on a
 desired allele frequency. If picked manually, the target SNPs should be in the order from the smallest to the largest.
 }
 \examples{
-m.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_mom')
-f.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_dad')
+m.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_mom',sep='')
+f.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_dad',sep='')
 picked.target <- pick_target.snp(c(m.file,f.file),0.05, 8)
 cat('Target SNPs picked:',picked.target[[2]],'\\n')
 }

@@ -16,16 +16,15 @@
 #' allele frequncies merged and the second is the row numbers of the target SNPs selected
 #' among all SNPs in the .bim file.
 #' @export
+#' @importFrom  utils read.table 
 #' @examples 
-#' m.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_mom',sep='')
-#' f.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_dad',sep='')
+#' m.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_mom')
+#' f.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_dad')
 #' picked.target <- pick_target.snp(c(m.file,f.file),0.05, 8)
 #' cat('Target SNPs picked:',picked.target[[2]],'\n')
 pick_target.snp <- function(input.plink.file, fr.desire="double", n.snp="integer") {
-  #if (!file.exists(paste(input.plink.file[1],'frq',sep='.'))) system(paste('plink.exe --noweb  --bfile ',input.plink.file[1],'--freq --out',input.plink.file[1]))
-  #if (!file.exists(paste(input.plink.file[2],'frq',sep='.'))) system(paste('plink.exe --noweb  --bfile ',input.plink.file[2],'--freq --out',input.plink.file[2]))
-  
-  if (!file.exists(paste(input.plink.file[1],'frq',sep='.'))) stop(paste(input.plink.file[1],'.frq',
+
+    if (!file.exists(paste(input.plink.file[1],'frq',sep='.'))) stop(paste(input.plink.file[1],'.frq',
                                                                          " is needed for selecting target SNPs",sep=''))
   if (!file.exists(paste(input.plink.file[2],'frq',sep='.'))) stop(paste(input.plink.file[2],'.frq',
                                                                          " is needed for selecting target SNPs",sep=''))
@@ -72,9 +71,9 @@ pick_target.snp <- function(input.plink.file, fr.desire="double", n.snp="integer
 #' @export
 #'
 #' @examples tar.snp <- c(21, 118, 121, 140, 155, 168, 218, 383) 
-#' m.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_mom',sep='')
-#' f.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_dad',sep='')
-#' k.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_kid',sep='')
+#' m.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_mom')
+#' f.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_dad')
+#' k.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_kid')
 #' # the preloaded data frame snp.all2 contains the data frame read from the corresponding .bim file.
 #' target.geno <- get.target.geno(c(m.file,f.file,k.file), tar.snp,snp.all2)
 get.target.geno <- function(input.plink.file, target.snp,snp.all2) {
@@ -148,6 +147,7 @@ get.target.geno <- function(input.plink.file, target.snp,snp.all2) {
 #' the chromosomal breaks is to take place for each individuals in the simulated trios. The second one
 #' is a matrix showing the chromosomal segments out of which each target SNP is selected for each simulated trio.
 #' @export
+#' @importFrom stats quantile
 #'
 #' @examples 
 #' tar.snp <- c(21, 118, 121, 140, 155, 168, 218, 383) 
@@ -212,7 +212,7 @@ get.brks <- function(N.brk,n.ped, snp.all2, target.snp,rcmb.rate=NA,same.brk=FAL
     brks <- matrix(rep(brks[1,],nrow(brks)),byrow=T,nrow=nrow(brks))
     fam.pos <- matrix(rep(fam.pos[1,],nrow(fam.pos)),byrow=T,nrow=nrow(fam.pos))
     print(brks[1,])
-    write(brks[1,],ncolumns=ncol(brks),file='same_breaks.txt')
+  #  write(brks[1,],ncolumns=ncol(brks),file='same_breaks.txt')
   }
   colnames(brks) <- NULL
   return(list(brks,fam.pos))
@@ -273,6 +273,8 @@ get.brks <- function(N.brk,n.ped, snp.all2, target.snp,rcmb.rate=NA,same.brk=FAL
 #' values for simulations of a quantitative trait.
 #' @export
 #' @importFrom foreach %dopar%
+#' @importFrom stats rbinom
+#' @importFrom stats rnorm
 #'
 #' @examples 
 #' tar.snp <- c(21, 118, 121, 140, 155, 168, 218, 383) 
@@ -281,9 +283,9 @@ get.brks <- function(N.brk,n.ped, snp.all2, target.snp,rcmb.rate=NA,same.brk=FAL
 #' family.position <- found.brks[[2]] 
 #' betas <- c(-6.4, 3.2, 5.8)
 #' pwy <- list(1:4,5:8)
-#' m.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_mom',sep='')
-#' f.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_dad',sep='')
-#' k.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_kid',sep='')
+#' m.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_mom')
+#' f.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_dad')
+#' k.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_kid')
 #' # the preloaded data frame snp.all2 contains the data frame read from the corresponding .bim file.
 #' target.geno <- get.target.geno(c(m.file,f.file,k.file), tar.snp,snp.all2)
 #' mom.target <- target.geno[[1]]
@@ -370,9 +372,9 @@ fit.risk.model.par <- function(n.ped,brks,target.snp,fam.pos, mom.tar,dad.tar, k
   e.vec <- sim.all[,2]
   pop.vec <- sim.all[,3]
  
-  if (!is.na(e.fr)) if (is.na(out.put.file)) write(e.vec,ncolumns=1,file=paste(tempdir(),'/exposure.txt',sep='')) else write(e.vec,ncolumns=1,file=paste(out.put.file,'exp.txt'))
-  if (two.pop)  if (is.na(out.put.file)) write(pop.vec,ncolumns=1,file=paste(tempdir(),'population.txt',sep='')) else write(pop.vec,ncolumns=1,file=paste(out.put.file,'pop.txt'))
-  if (qtl)  if (is.na(out.put.file)) write(pheno,ncolumns=1,file=paste(tempdir(),'phenotype.txt',sep='')) else write(pop.vec,ncolumns=1,file=paste(out.put.file,'pheno.txt'))
+  if (!is.na(e.fr[1])) if (is.na(out.put.file)) write(e.vec,ncolumns=1,file=file.path(tempdir(),'/exposure.txt')) else write(e.vec,ncolumns=1,file=paste(out.put.file,'_exposure.txt'))
+  if (two.pop)  if (is.na(out.put.file)) write(pop.vec,ncolumns=1,file=file.path(tempdir(),'/population.txt')) else write(pop.vec,ncolumns=1,file=paste(out.put.file,'_population.txt'))
+  if (qtl)  if (is.na(out.put.file)) write(pheno,ncolumns=1,file=file.path(tempdir(),'/phenotype.txt')) else write(pheno,ncolumns=1,file=paste(out.put.file,'_phenotype.txt'))
   
   return(list(sel.fam.all, pathway.all,e.vec,pop.vec,pheno))
 }
@@ -407,6 +409,7 @@ fit.risk.model.par <- function(n.ped,brks,target.snp,fam.pos, mom.tar,dad.tar, k
 #' third are the children's. 
 #' @export
 #' @importFrom foreach %dopar%
+#' @importFrom methods new
 #'
 #' @examples 
 #' tar.snp <- c(21, 118, 121, 140, 155, 168, 218, 383) 
@@ -415,9 +418,9 @@ fit.risk.model.par <- function(n.ped,brks,target.snp,fam.pos, mom.tar,dad.tar, k
 #' family.position <- found.brks[[2]] 
 #' betas <- c(-6.4, 3.2, 5.8)
 #' pwy <- list(1:4,5:8)
-#' m.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_mom',sep='')
-#' f.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_dad',sep='')
-#' k.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_kid',sep='')
+#' m.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_mom')
+#' f.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_dad')
+#' k.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_kid')
 #' # the preloaded data frame snp.all2 contains the data frame read from the corresponding .bim file.
 #' target.geno <- get.target.geno(c(m.file,f.file,k.file), tar.snp,snp.all2)
 #' mom.target <- target.geno[[1]]
@@ -430,7 +433,7 @@ fit.risk.model.par <- function(n.ped,brks,target.snp,fam.pos, mom.tar,dad.tar, k
 #' sel.fam <- fitted.model[[1]]
 #' sim.pathway.geno <-  fitted.model[[2]]
 #' \dontrun{
-#' glue.chr.segment.par(c(m.file,f.file,k.file),paste(,tempdir()'/trio',sep=''), breaks,sel.fam,
+#' glue.chr.segment.par(c(m.file,f.file,k.file),file.path(tempdir(),'trio'), breaks,sel.fam,
 #'                      snp.all2,sim.pathway.geno,target.snp,pop.vec=NA,no_cores=1,flip=TRUE) 
 #' }
 #' 
@@ -650,15 +653,15 @@ glue.chr.segment.par <- function(input.plink.file,out.put.file, brks,sel.fam.all
 #' @export
 #'
 #' @examples 
-#' m.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_mom',sep='')
-#' f.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_dad',sep='')
-#' k.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_kid',sep='')
+#' m.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_mom')
+#' f.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_dad')
+#' k.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_kid')
 #' input.plink.file <- c(m.file, f.file, k.file)
 
-#' TriadSim(input.plink.file, paste(tempdir(),'/triad',sep=''), fr.desire=0.05,pathways=list(1:4,5:8),
+#' \dontrun{TriadSim(input.plink.file, file.path(tempdir(),'triad'), fr.desire=0.05,pathways=list(1:4,5:8),
 #'        n.ped=1000, N.brk=3, target.snp=NA,P0=0.001,is.OR=FALSE,risk.exposure= 1,
 #'        risk.pathway.unexposed=c(1.5, 2), risk.pathway.exposed=c(1.5, 2), is.case=TRUE, e.fr=NA, 
-#'        pop1.frac=NA, P0.ratio=1, rcmb.rate, no_cores=1)
+#'        pop1.frac=NA, P0.ratio=1, rcmb.rate, no_cores=1)}
 
 TriadSim <- function(input.plink.file, out.put.file, fr.desire,pathways,n.ped, N.brk, target.snp=NA,P0, is.OR,
          risk.exposure, risk.pathway.unexposed, risk.pathway.exposed, is.case=TRUE, e.fr=NA, pop1.frac=NA,P0.ratio=1,

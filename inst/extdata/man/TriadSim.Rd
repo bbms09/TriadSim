@@ -89,11 +89,11 @@ specific SNPs at specific sets of loci, which we will refer to as "pathways". Tr
 triad genotypes from existing data. It takes genotypes in PLINK format as the input files.
 }
 \examples{
-m.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_mom')
-f.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_dad')
-k.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_kid')
+m.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_mom',sep='')
+f.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_dad',sep='')
+k.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_kid',sep='')
 input.plink.file <- c(m.file, f.file, k.file)
-\dontrun{TriadSim(input.plink.file, file.path(tempdir(),'triad'), fr.desire=0.05,pathways=list(1:4,5:8),
+\dontrun{TriadSim(input.plink.file, paste(tempdir(),'/triad',sep=''), fr.desire=0.05,pathways=list(1:4,5:8),
        n.ped=1000, N.brk=3, target.snp=NA,P0=0.001,is.OR=FALSE,risk.exposure= 1,
        risk.pathway.unexposed=c(1.5, 2), risk.pathway.exposed=c(1.5, 2), is.case=TRUE, e.fr=NA, 
        pop1.frac=NA, P0.ratio=1, rcmb.rate, no_cores=1)}

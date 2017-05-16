@@ -87,9 +87,9 @@ breaks <- found.brks[[1]]
 family.position <- found.brks[[2]] 
 betas <- c(-6.4, 3.2, 5.8)
 pwy <- list(1:4,5:8)
-m.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_mom')
-f.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_dad')
-k.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_kid')
+m.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_mom',sep='')
+f.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_dad',sep='')
+k.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_kid',sep='')
 # the preloaded data frame snp.all2 contains the data frame read from the corresponding .bim file.
 target.geno <- get.target.geno(c(m.file,f.file,k.file), tar.snp,snp.all2)
 mom.target <- target.geno[[1]]

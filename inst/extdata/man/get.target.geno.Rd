@@ -29,9 +29,9 @@ which simulation is based).
 }
 \examples{
 tar.snp <- c(21, 118, 121, 140, 155, 168, 218, 383) 
-m.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_mom')
-f.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_dad')
-k.file <- file.path(system.file(package = "TriadSim"),'extdata/pop1_4chr_kid')
+m.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_mom',sep='')
+f.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_dad',sep='')
+k.file <- paste(system.file(package = "TriadSim"),'/extdata/pop1_4chr_kid',sep='')
 # the preloaded data frame snp.all2 contains the data frame read from the corresponding .bim file.
 target.geno <- get.target.geno(c(m.file,f.file,k.file), tar.snp,snp.all2)
 }
